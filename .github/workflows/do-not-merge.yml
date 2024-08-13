@@ -1,0 +1,17 @@
+name: Check DO NOT MERGE on PR title
+
+on:
+    pull_request:
+        types: [opened, reopened, edited, synchronize]
+
+jobs:
+    do-not-merge-check:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check DO NOT MERGE on PR title
+              run: |
+                  if [[ '${{ startsWith(github.event.pull_request.title, 'DO NOT MERGE:') || startsWith(github.event.pull_request.title, '[DO NOT MERGE]') }}' == 'true' ]]; then
+                      echo 'PR title includes DO NOT MERGE'
+                      echo 'Please remove [DO NOT MERGE] or DO NOT MERGE: from the PR title when the PR is ready'
+                      exit 1
+                  fi
